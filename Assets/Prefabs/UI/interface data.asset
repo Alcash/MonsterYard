@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_InterfaceWindows:
   - {fileID: 1667327704947927010, guid: c7026fb85e8211e49b98bae2658156b6, type: 3}
+  - {fileID: 5317661505766822826, guid: 939315be720091d408a12fafee31b291, type: 3}
+  - {fileID: 2074539228205713673, guid: 72698edbef3866d44b82998332dc3c63, type: 3}
+  - {fileID: 7567046605874882610, guid: ea824eb42b3f5bc478792b91c2ac9371, type: 3}
+  - {fileID: 1667327704947927010, guid: 71aa183c2347a0444ba3fcd34b5c150b, type: 3}

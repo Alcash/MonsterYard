@@ -1,58 +1,54 @@
 using ProjectCore.InterfaceManger;
 using ProjectCore.InterfaceManger.UIView;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ProjectCore.StateManager
 {
-    public class LoadingGameState : IState
-    {
-        private readonly GameManager _gamePlayManager;
-        private readonly InterfaceManager _interfaceManager;
+    public class LoadingGameState : BaseState, IState, IFixedUpdatableState
+    {      
         private readonly string _interfaceKey = "Screen.Loading";
-        private InterfaceWindow _loadingWindow;
+        protected override string interfaceKey => _interfaceKey;
         private LoadingSceneView _loadingSceneView;
+
         private float loading = 0;
-        private float loadingTime = 2;
+        private float loadingTime = 2;     
 
-        public LoadingGameState(GameManager manager , InterfaceManager interfaceManager)
+        public LoadingGameState(GameManager manager, InterfaceManager interfaceManager) : base(manager, interfaceManager)
         {
-            _gamePlayManager  = manager;
-            _interfaceManager = interfaceManager;
-        }
+        }                
 
-        public void StateEnd()
+        public override void StateEnd()
         {
-            _interfaceManager.CloseLastView();
+            interfaceManager.CloseLastView();
         }
 
-        public void StateInit()
-        {
-            if (_interfaceManager.LoadView(_interfaceKey, out _loadingWindow))
-            {
-                _loadingSceneView = _loadingWindow.GetComponent<LoadingSceneView>();
-            }
-        }
-
-        public void StateStart()
-        {            
-            _interfaceManager.OpenView(_interfaceKey);
-        }
-
-        public void StateUpdate(float delta)
+        public void StateFixedUpdate(float delta)
         {
             loading += delta;
-
-            _loadingSceneView.SliderStatus.value = loading;
-            _loadingSceneView.TextStatus.text = $"{(int)((loading/ loadingTime) * 100)}%";
+            if (loading > loadingTime) loading = loadingTime;
+            var loadingValue = loading / loadingTime;
+            _loadingSceneView.SliderStatus.value = loadingValue;
+            _loadingSceneView.TextStatus.text = $"{(int)(loadingValue * 100)}%";
 
             if (loading >= loadingTime)
             {
-                _gamePlayManager.StartState(typeof(MainMenuState));
+                gameStateManager.StartState(typeof(MainMenuState));
             }
         }
 
+        public override void StateInit()
+        {
+            LoadView(out _loadingSceneView);
+        }        
 
+        public override void StateStart(IStateArgs stateArgs = null)
+        {                        
+            interfaceManager.OpenView(_interfaceKey);               
+        }      
     }
 }

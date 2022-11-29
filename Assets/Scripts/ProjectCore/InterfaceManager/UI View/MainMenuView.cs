@@ -8,13 +8,13 @@ namespace ProjectCore.InterfaceManger.UIView
 {
     public class MainMenuView : MonoBehaviour
     {
-        public event Action StartGameClicked;
-        public event Action ExitGameClicked;
-        public event Action SettingClicked;
-
-
         [SerializeField] private Button m_StartGameButton;
+        public Button StartGameButton => m_StartGameButton;
+
         [SerializeField] private Button m_ExitGameButton;
+        public Button ExitGameButton => m_ExitGameButton;
+
         [SerializeField] private Button m_SettingButton;
+        public Button SettingButton => m_SettingButton;
     }
 }

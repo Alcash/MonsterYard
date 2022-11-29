@@ -14,21 +14,24 @@ namespace ProjectCore.InterfaceManger
         private List<string> _windowsList = new List<string>();
 
         private void Awake()
-        {                
-            foreach (var window in m_InterfaceData.InterfaceWindows)
-            {
-                m_InterfaceViews.Add(window.InterfaceKey, window);
-                window.InitView(this);
-            }    
-        }       
-
+        {
+            DontDestroyOnLoad(this);
+        }
         public bool LoadView(string key, out InterfaceWindow interfaceWindow)
         {
             interfaceWindow = null;
             if (m_InterfaceViews.ContainsKey(key) == false)
-                return false;
+            {
+                var prefab = m_InterfaceData.InterfaceWindows.FirstOrDefault(x => x.InterfaceKey == key);
+                if(prefab == null)
+                {
+                    return false;
+                }
+                var window = Instantiate(prefab, transform);
+                m_InterfaceViews.Add(window.InterfaceKey, window);
+                window.InitView(this);
+            }            
 
-           
             interfaceWindow = m_InterfaceViews[key];
             return true;
         }
@@ -55,7 +58,8 @@ namespace ProjectCore.InterfaceManger
 
             foreach (var view in m_InterfaceViews)
             {
-                m_InterfaceViews[view.Key].SetActive(_windowsList.Last() == view.Key);
+                if(lastKey == view.Key)
+                    m_InterfaceViews[view.Key].SetActive(false);
             }
         }
     }
