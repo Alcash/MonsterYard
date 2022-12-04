@@ -8,6 +8,7 @@ namespace ProjectCore.InterfaceManger
 {
     public class InterfaceManager : MonoBehaviour
     {
+        private static bool _isInited;
         [SerializeField] private InterfaceData m_InterfaceData;
 
         private Dictionary<string, InterfaceWindow> m_InterfaceViews = new Dictionary<string, InterfaceWindow>();
@@ -15,6 +16,11 @@ namespace ProjectCore.InterfaceManger
 
         private void Awake()
         {
+            if(_isInited)
+            {
+                return;
+            }
+            _isInited = true;
             DontDestroyOnLoad(this);
         }
         public bool LoadView(string key, out InterfaceWindow interfaceWindow)

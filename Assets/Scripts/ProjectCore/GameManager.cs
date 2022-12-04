@@ -7,6 +7,7 @@ namespace ProjectCore.StateManager
 {
     public class GameManager : MonoBehaviour
     {
+        private static bool _isInited;
         [SerializeField] private InterfaceManager _interfaceManger;
         private Dictionary<Type,IState> _states;
         private IUpdatableState _updatableState;
@@ -16,6 +17,11 @@ namespace ProjectCore.StateManager
 
         private void Awake()
         {
+            if (_isInited)
+            {
+                return;
+            }
+            _isInited = true;
             DontDestroyOnLoad(this);
         }
         private void Start()
